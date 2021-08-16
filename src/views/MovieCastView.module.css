@@ -1,0 +1,15 @@
+.image{
+    width: 150px;
+    display: inline-block;
+}
+.actors{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin: -5px;
+}
+.actor{
+    list-style: none;
+    margin: 5px;
+    width: 150px;
+}

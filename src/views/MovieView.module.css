@@ -1,0 +1,17 @@
+.image{
+    width: 200px;
+    display: inline-block;
+}
+.movie {
+    display: flex;
+    padding: 10px;
+}
+.info{
+    padding-left: 15px;
+}
+.title{
+    padding-left: 10px;
+}
+.link{
+    padding-left: 10px;
+}
