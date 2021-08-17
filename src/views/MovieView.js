@@ -1,11 +1,19 @@
-import { useState, useEffect } from "react";
-import { useParams, Route, Link } from "react-router-dom";
-import MovieCastView from './MovieCastView';
-import MovieReviewsView from './MovieReviewsView';
+import { useState, useEffect, Suspense, lazy } from "react";
+import { useParams, Route, Link, useLocation } from "react-router-dom";
 import { fetchMovie, IMAGE_URL } from '../services/MoviesSearch-api';
 import styles from './MovieView.module.css';
 
+const MovieCastView = lazy(() => 
+    import('./MovieCastView.js' /* webpackChunkName: "MovieCastView"*/),
+);
+const MovieReviewsView = lazy(() => 
+    import('./MovieReviewsView.js' /* webpackChunkName: "MovieReviewsView"*/),
+);
+
 export default function MovieView() {
+    const location = useLocation();
+    // console.log('MovieView: ', location);
+
     const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
 
@@ -17,6 +25,9 @@ export default function MovieView() {
         <>
         {movie && (
             <>
+            <button type="submit" className={styles.backButton}>
+                &#8592; Go back 
+            </button>
             <div className={styles.movie}>
                 <img className={styles.image} src={`${IMAGE_URL}${movie.poster_path}`} alt={movie.original_title} />
                 <div className={styles.info}>
@@ -34,17 +45,31 @@ export default function MovieView() {
 
         <p className={styles.title}>Additional information</p>
             
-        <Link to={`/movies/${movieId}/cast`} exact className={styles.link} activeClassName={styles.activeLink}>Cast</Link>
+        <Link to={{
+            pathname: `/movies/${movieId}/cast`,
+            state: { from: location }
+            }} exact="true" className={styles.link} activeclassname={styles.activeLink}>
+                Cast
+        </Link>
         <br></br>
-        <Link to={`/movies/${movieId}/reviews`} exact className={styles.link} activeClassName={styles.activeLink}>Reviews</Link>
+        <Link to={{
+            pathname: `/movies/${movieId}/reviews`,
+            state: { from: location }
+            }} exact="true" className={styles.link} activeclassname={styles.activeLink}>
+                Reviews
+        </Link>
 
+        <Suspense fallback={<h1>Loading...</h1>}>
         <Route path="/movies/:movieId/cast">
             <MovieCastView movieId={movieId}>Cast</MovieCastView>
         </Route>
+        </Suspense>
 
+        <Suspense fallback={<h1>Loading...</h1>}>
         <Route path="/movies/:movieId/reviews">
             <MovieReviewsView movieId={movieId}>Reviews</MovieReviewsView>
         </Route>
+        </Suspense>
 
         </>
     )

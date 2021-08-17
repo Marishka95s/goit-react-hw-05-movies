@@ -13,12 +13,14 @@ export default function HomeView() {
     return(
         <>
             <h2 className={styles.heading}>Trending today</h2>
-            {movies && 
-            movies.map(movie => (
+            {movies && (
+            <ul>
+            {movies.map(movie => (
                 <li key={movie.id} className={styles.item}>
                     <NavLink className={styles.link} to={`${url}movies/${movie.id}`}>{movie.title}</NavLink>
                 </li>
             ))}
+            </ul>)}
         </>
     )
 }

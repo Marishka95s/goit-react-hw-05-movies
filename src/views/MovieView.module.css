@@ -15,3 +15,11 @@
 .link{
     padding-left: 10px;
 }
+.backButton{
+    padding: 5px;
+    margin: 10px;
+    width: 100px;
+    background-color: lightgray;
+    border-radius: 2px;
+    border: 1px solid black;
+}
