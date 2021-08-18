@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { fetchMovieByQuery } from '../services/MoviesSearch-api';
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { NavLink, useRouteMatch, useLocation, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import styles from './MoviesView.module.css';
 
@@ -8,21 +8,18 @@ export default function MoviesView() {
     const [movies, setMovies] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const { url } = useRouteMatch();
+    const location = useLocation();
 
     const handleChange = (event) => {
-        setSearchQuery(event.currentTarget.value);      
+        setSearchQuery(event.currentTarget.value.toLowerCase());      
     }
 
-    // const fetchMovies = useEffect(() => {
-    //     fetchMovieByQuery(searchQuery).then(data => {setMovie(data); console.log(data)});
-    // }, [searchQuery]);
-
     const handleSubmit = e => {
-        e.preventDefault();  
+        e.preventDefault();
         if (searchQuery.length !== 0) {
-            fetchMovieByQuery(searchQuery).then(data => {setMovies(data.results); console.log(data)});     
-        }  
-    }   
+            fetchMovieByQuery(searchQuery).then(data => setMovies(data.results));     
+        }
+    }       
 
     return (
         <>
@@ -39,13 +36,15 @@ export default function MoviesView() {
         <section>
             {movies && (
                 <>
-                <button type="submit" className={styles.backButton}>
-                &#8592; Go back 
-                </button>
                 <ul>
                 {movies.map(movie => (
                     <li key={movie.id} className={styles.item}>
-                        <NavLink className={styles.link} to={`${url}/${movie.id}`}>{movie.title}</NavLink>
+                        <NavLink className={styles.link} to={{
+                            pathname: `${url}/${movie.id}`,
+                            state: {
+                                location
+                            }
+                        }}>{movie.title}</NavLink>
                     </li>
                 ))}
                 </ul>

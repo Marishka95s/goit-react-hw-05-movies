@@ -32,7 +32,8 @@
     padding: 5px;
     margin: 10px;
     width: 100px;
-    background-color: lightgray;
+    background-color: white;
     border-radius: 2px;
-    border: 1px solid black;
+    border: none;
+    cursor: pointer;
 }

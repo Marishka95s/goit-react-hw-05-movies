@@ -11,7 +11,7 @@ export default function MovieReviewesView({ movieId }) {
 
     return(
     <>
-    { (movie !== null) 
+    { ((movie !== null) && (movie.results.length !== 0)) 
         ? (<ul className={styles.reviews}>
             {movie.results.map((review, idx) => 
                 (<li key={idx} className={styles.review}>
@@ -19,9 +19,9 @@ export default function MovieReviewesView({ movieId }) {
                     <p className={styles.reviewInfo}>{review.content}</p>
                     
                 </li>)
-                )}
+            )}
           </ul>)
-        : <p>We don't have any reviews for this movie</p> }
+        : (<p className={styles.noReviewInfo}>We don't have any reviews for this movie</p>) }
     </>
     )
 }

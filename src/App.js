@@ -8,14 +8,10 @@ import './App.css';
 // import MovieView from './views/MovieView';
 // import NotFoundView from './views/NotFoundView';
 
-const HomeView = lazy(() => import('./views/HomeView.js' /* webpackChunkName: "HomeView"*/),
-);
-const MoviesView = lazy(() => import('./views/MoviesView.js' /* webpackChunkName: "MoviesView"*/),
-);
-const MovieView = lazy(() => import('./views/MovieView.js' /* webpackChunkName: "MovieView"*/),
-);
-const NotFoundView = lazy(() => import('./views/NotFoundView.js' /* webpackChunkName: "NotFoundView"*/),
-);
+const HomeView = lazy(() => import('./views/HomeView.js' /* webpackChunkName: "HomeView"*/),);
+const MoviesView = lazy(() => import('./views/MoviesView.js' /* webpackChunkName: "MoviesView"*/),);
+const MovieView = lazy(() => import('./views/MovieView.js' /* webpackChunkName: "MovieView"*/),);
+const NotFoundView = lazy(() => import('./views/NotFoundView.js' /* webpackChunkName: "NotFoundView"*/),);
 
 export default function App() {
   return (
