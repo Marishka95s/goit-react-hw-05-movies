@@ -1,54 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchMovieByQuery } from '../services/MoviesSearch-api';
-import { NavLink, useRouteMatch, useLocation, Link } from "react-router-dom";
+import { useRouteMatch, useLocation, useHistory, Link } from "react-router-dom";
+import Searchbar from '../components/Searchbar/Searchbar';
 import PropTypes from 'prop-types';
 import styles from './MoviesView.module.css';
 
 export default function MoviesView() {
-    const [movies, setMovies] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
     const { url } = useRouteMatch();
     const location = useLocation();
+    const history = useHistory();
+    const [movies, setMovies] = useState(null);
+    const [searchQuery, setSearchQuery] = useState(new URLSearchParams(location.search).get('query') ?? '',);
+    const [error, setError] = useState(null);
 
-    const handleChange = (event) => {
-        setSearchQuery(event.currentTarget.value.toLowerCase());      
-    }
+    useEffect(() => {
+        if (searchQuery)
+        fetchMovieByQuery(searchQuery)
+            .then(request => {
+              setMovies(request.results);
+            })
+            .catch(error => setError(error.message));
+      }, [searchQuery]);
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        if (searchQuery.length !== 0) {
-            fetchMovieByQuery(searchQuery).then(data => setMovies(data.results));     
-        }
-    }       
+      const onChangeQuery = query => {
+        setMovies([]);
+        setError(null);
+        setSearchQuery(query);
+        history.push({
+          ...location,
+          search: `query=${query}`,
+        });
+      };       
 
     return (
         <>
-        <header className="Searchbar">
-            <form className="SearchForm" onSubmit={handleSubmit}>                
-                <input className={styles.input} type="text" autoComplete="off" autoFocus placeholder="Search movies" value={searchQuery} onChange={handleChange}/>
+        <Searchbar onSubmit={onChangeQuery} />
 
-                <button type="submit" className={styles.searchButton}>
-                   Search 
-                </button>
-            </form>
-        </header>
+        {error && (
+            <p style={{ color: 'red', textAlign: 'center', fontSize: '20px' }}>
+            This is error: {error}
+            </p>
+        )}
 
         <section>
             {movies && (
-                <>
                 <ul>
                 {movies.map(movie => (
                     <li key={movie.id} className={styles.item}>
-                        <NavLink className={styles.link} to={{
+                        <Link className={styles.link} to={{
                             pathname: `${url}/${movie.id}`,
                             state: {
                                 location
                             }
-                        }}>{movie.title}</NavLink>
+                        }}>{movie.title}</Link>
                     </li>
                 ))}
-                </ul>
-                </>)}
+                </ul>)}
         </section>
         </>
     )

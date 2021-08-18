@@ -6,7 +6,6 @@ import styles from './HomeView.module.css';
 export default function HomeView() {
     const { url } = useRouteMatch();
     const location = useLocation();
-    console.log(location);
     const [movies, setMovies] = useState(null);
 
     useEffect(() => {

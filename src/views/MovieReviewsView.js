@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import { fetchMovieReviews } from '../services/MoviesSearch-api';
+import PropTypes from 'prop-types';
 import styles from './MovieReviewsView.module.css';
 
 export default function MovieReviewesView({ movieId }) {
-    const [movie, setMovie] = useState(null);
+    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        fetchMovieReviews(movieId).then(data => {setMovie(data); console.log(data)});
+        fetchMovieReviews(movieId).then(data => setReviews(data.results));
     }, [movieId]);
 
     return(
     <>
-    { ((movie !== null) && (movie.results.length !== 0)) 
+    { ((reviews.length > 0)) 
         ? (<ul className={styles.reviews}>
-            {movie.results.map((review, idx) => 
-                (<li key={idx} className={styles.review}>
+            {reviews.map(review => 
+                (<li key={review.id} className={styles.review}>
                     <h3 className={styles.reviewInfo}>Author: {review.author}</h3>
-                    <p className={styles.reviewInfo}>{review.content}</p>
-                    
+                    <p className={styles.reviewInfo}>{review.content}</p>                    
                 </li>)
             )}
           </ul>)
@@ -25,3 +25,7 @@ export default function MovieReviewesView({ movieId }) {
     </>
     )
 }
+
+MovieReviewesView.propTypes = {
+    movieId: PropTypes.string,
+  };

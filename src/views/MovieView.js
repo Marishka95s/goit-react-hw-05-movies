@@ -1,5 +1,5 @@
 import { useState, useEffect, Suspense, lazy } from "react";
-import { useParams, Route, Link, useLocation, useHistory, Switch } from "react-router-dom";
+import { useParams, Route, Link, useLocation, useHistory, useRouteMatch, Switch } from "react-router-dom";
 import { fetchMovie, IMAGE_URL } from '../services/MoviesSearch-api';
 import styles from './MovieView.module.css';
 
@@ -7,8 +7,10 @@ const MovieCastView = lazy(() => import('./MovieCastView.js' /* webpackChunkName
 const MovieReviewsView = lazy(() => import('./MovieReviewsView.js' /* webpackChunkName: "MovieReviewsView"*/),);
 
 export default function MovieView() {
-    const location = useLocation();
     const history = useHistory();
+    const location = useLocation();
+    const { url, path } = useRouteMatch();
+    
 
     const { movieId } = useParams();
     const [movie, setMovie] = useState(null);
@@ -18,8 +20,8 @@ export default function MovieView() {
     }, [movieId]);
 
     const onGoBack = () => {
-        history.push(location?.state?.from?.location ?? '/movies');
-        // history.goBack();
+        // history.push(location?.state?.from ?? '/movies');
+        history.goBack();
     }
 
     return(
@@ -48,26 +50,26 @@ export default function MovieView() {
         <p className={styles.title}>Additional information</p>
             
         <Link to={{
-            pathname: `/movies/${movieId}/cast`,
-            state: { from: location.state }
+            pathname: `${url}/cast`,
+            state: { from: location?.state?.from ?? '/movies' }
             }} exact="true" className={styles.link} activeclassname={styles.activeLink}>
                 Cast
         </Link>
         <br></br>
         <Link to={{
-            pathname: `/movies/${movieId}/reviews`,
-            state: { from: location.state }
+            pathname: `${url}/reviews`,
+            state: { from: location?.state?.from ?? '/movies' }
             }} exact="true" className={styles.link} activeclassname={styles.activeLink}>
                 Reviews
         </Link>
 
         <Suspense fallback={<h1>Loading...</h1>}>
             <Switch>
-                <Route path="/movies/:movieId/cast">
-                    <MovieCastView movieId={movieId}>Cast</MovieCastView>
+                <Route path={`${path}/cast`}>
+                    <MovieCastView movieId={movieId}/>
                 </Route>
-                <Route path="/movies/:movieId/reviews">
-                    <MovieReviewsView movieId={movieId}>Reviews</MovieReviewsView>
+                <Route path={`${path}/reviews`}>
+                    <MovieReviewsView movieId={movieId}/>
                 </Route>
             </Switch>
         </Suspense>

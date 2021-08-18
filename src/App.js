@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
 import AppBar from './components/AppBar/AppBar';
 import './App.css';
 
@@ -18,7 +19,7 @@ export default function App() {
     <>
     <AppBar />
 
-    <Suspense fallback={<h1>Loading...</h1>}>
+    <Suspense fallback={<Loader type="ThreeDots" color="#00BFFF" height={80} width={80} />}>
     <Switch>
       <Route path="/" exact>
         <HomeView />
