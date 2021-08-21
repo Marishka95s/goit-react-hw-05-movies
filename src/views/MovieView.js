@@ -20,8 +20,8 @@ export default function MovieView() {
     }, [movieId]);
 
     const onGoBack = () => {
-        // history.push(location?.state?.from ?? '/movies');
-        history.goBack();
+        history.push(location?.state?.from ?? '/movies');
+        // history.goBack();
     }
 
     return(
@@ -51,14 +51,14 @@ export default function MovieView() {
             
         <Link to={{
             pathname: `${url}/cast`,
-            state: { from: location?.state?.from ?? '/movies' }
+            state: { from: location?.state?.from }
             }} exact="true" className={styles.link} activeclassname={styles.activeLink}>
                 Cast
         </Link>
         <br></br>
         <Link to={{
             pathname: `${url}/reviews`,
-            state: { from: location?.state?.from ?? '/movies' }
+            state: { from: location?.state?.from }
             }} exact="true" className={styles.link} activeclassname={styles.activeLink}>
                 Reviews
         </Link>

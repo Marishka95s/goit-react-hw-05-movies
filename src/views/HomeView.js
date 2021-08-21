@@ -21,7 +21,7 @@ export default function HomeView() {
                 <li key={movie.id} className={styles.item}>
                     <NavLink className={styles.link} to={{
                         pathname: `${url}movies/${movie.id}`,
-                        state: { from: location.state }
+                        state: { from: location }
                 }}>{movie.title}</NavLink>
                 </li>
             ))}

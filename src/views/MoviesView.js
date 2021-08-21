@@ -49,8 +49,7 @@ export default function MoviesView() {
                     <li key={movie.id} className={styles.item}>
                         <Link className={styles.link} to={{
                             pathname: `${url}/${movie.id}`,
-                            state: {
-                                location
+                            state: { from: location
                             }
                         }}>{movie.title}</Link>
                     </li>
